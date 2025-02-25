@@ -1669,16 +1669,39 @@ void DLLEXPORT V_CalcRefdef(struct ref_params_s* pparams)
 =============
 V_DropPunchAngle
 
+Reworked to use damping/easing.
+Essentially, the difference is that it is properly clamped to +7 degrees,
+and as opposed to basic linear interpolation, it follows a damped cosine, which snaps very aggressively on punch, 
+with a slow, bouncing taper off that feels natural. Takes delta-time into account.
+
 =============
 */
 void V_DropPunchAngle(float frametime, float* ev_punchangle)
 {
-	float len;
+	static float total_time = 0.0f;
+	total_time += frametime;
 
-	len = VectorNormalize(ev_punchangle);
-	len -= (10.0 + len * 0.5) * frametime;
+	// normalize into unit-vector to represent an angle
+	float len = VectorNormalize(ev_punchangle);
+
+	// damped oscillation parameters
+	const float frequency = 4.5f;
+	const float damping = 2.0f;
+
+	float oscillation = cos(total_time * frequency * M_PI);
+	float damped_oscillation = exp(-damping * total_time) * oscillation;
+
+	// scale oscillator by frame-time, apply y-offset and amplitude
+	len -= frametime * (10.0f + damped_oscillation * 5.0f);
+
+	// clamp from 0-7 deg (valve's original constraints)
+	len = V_min(len, 7.0f);
 	len = V_max(len, 0.0f);
 	VectorScale(ev_punchangle, len, ev_punchangle);
+
+	// reset time when punch angle is zero
+	if (len <= 0.0f)
+		total_time = 0.0f;
 }
 
 /*
