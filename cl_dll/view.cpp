@@ -1694,9 +1694,9 @@ void V_DropPunchAngle(float frametime, float* ev_punchangle)
 	// scale oscillator by frame-time, apply y-offset and amplitude
 	len -= frametime * (10.0f + damped_oscillation * 5.0f);
 
-	// clamp from 0-7 deg (valve's original constraints)
+	// clamp from -7 -> 7 deg (valve's original constraints)
 	len = V_min(len, 7.0f);
-	len = V_max(len, 0.0f);
+	len = V_max(len, -7.0f);
 	VectorScale(ev_punchangle, len, ev_punchangle);
 
 	// reset time when punch angle is zero
