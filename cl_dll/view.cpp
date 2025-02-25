@@ -1676,8 +1676,8 @@ with a slow, bouncing taper off that feels natural. Takes delta-time into accoun
 
 =============
 */
-	void
-	V_DropPunchAngle(float frametime, float* ev_punchangle)
+
+void V_DropPunchAngle(float frametime, float* ev_punchangle)
 {
 	static float total_time = 0.0f;
 	total_time += frametime;
