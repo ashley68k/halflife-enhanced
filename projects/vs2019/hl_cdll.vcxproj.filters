@@ -596,5 +596,8 @@
     <ClInclude Include="..\..\cl_dll\particleman\CBaseParticle.h">
       <Filter>Header Files\cl_dll\particleman</Filter>
     </ClInclude>
+    <ClInclude Include="bassmanager.h">
+      <Filter>Header Files\cl_dll</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
