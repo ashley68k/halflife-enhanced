@@ -1676,7 +1676,8 @@ with a slow, bouncing taper off that feels natural. Takes delta-time into accoun
 
 =============
 */
-void V_DropPunchAngle(float frametime, float* ev_punchangle)
+	void
+	V_DropPunchAngle(float frametime, float* ev_punchangle)
 {
 	static float total_time = 0.0f;
 	total_time += frametime;
@@ -1694,9 +1695,10 @@ void V_DropPunchAngle(float frametime, float* ev_punchangle)
 	// scale oscillator by frame-time, apply y-offset and amplitude
 	len -= frametime * (10.0f + damped_oscillation * 5.0f);
 
-	// clamp from -7 -> 7 deg (valve's original constraints)
+	// clamp from 0-7deg
+	// FIXME: This code doesn't work for negative angles, so clamp to zero. Possibly rework entire function
 	len = V_min(len, 7.0f);
-	len = V_max(len, -7.0f);
+	len = V_max(len, 0.0f);
 	VectorScale(ev_punchangle, len, ev_punchangle);
 
 	// reset time when punch angle is zero
