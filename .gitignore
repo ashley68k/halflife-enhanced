@@ -2,3 +2,40 @@
 !lib/public/SDL2.lib
 !utils/procinfo/lib/win32_vc6/procinfo.lib
 !utils/vgui/lib/win32_vc16/vgui.lib
+
+# Allow BASS library
+!lib/public/bass.lib
+
+# CPP gitignore
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
