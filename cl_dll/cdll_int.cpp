@@ -38,6 +38,8 @@
 #include "vgui_TeamFortressViewport.h"
 #include "filesystem_utils.h"
 
+#include "bassmanager.h"
+
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;
 TeamFortressViewport* gViewPort = NULL;
@@ -125,6 +127,13 @@ static bool CL_InitClient()
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Fatal Error",
 			"This mod has detected that it is being run from a Valve game directory which is not supported\n"
 			"Run this mod from its intended location\n\nThe game will now shut down", nullptr);
+		return false;
+	}
+
+	// a little hacky but it prevents header conflicts
+	// enforce that BASS initializes properly
+	if(!BASSManager::Initialize(gEngfuncs.pfnGetGameDirectory()));
+	{
 		return false;
 	}
 

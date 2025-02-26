@@ -23,7 +23,7 @@ bool BASSManager::Initialize(const char* gameDir)
 	SDL_Window* win = SDL_GL_GetCurrentWindow();
 	SDL_bool infoSuccess = SDL_GetWindowWMInfo(win, &sysInfo);
 
-	if (win != NULL && infoSuccess == SDL_TRUE)
+	if (win != nullptr && infoSuccess == SDL_TRUE)
 	{
 		HWND hWindow = sysInfo.info.win.window;
 
