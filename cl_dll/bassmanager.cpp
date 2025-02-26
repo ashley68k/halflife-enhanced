@@ -3,8 +3,10 @@
 #include "SDL2/SDL_syswm.h"
 #include "SDL2/SDL_messagebox.h"
 #include "bassmanager.h"
+#include <string>
 
 using namespace BASSManager;
+using namespace std;
 
 /// <summary>
 /// A function to initialize the BASS library, prepare for use, and handle error checking.

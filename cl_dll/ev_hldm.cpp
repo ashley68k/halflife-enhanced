@@ -479,6 +479,8 @@ void EV_FireGlock1(event_args_t* args)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(empty ? GLOCK_SHOOT_EMPTY : GLOCK_SHOOT, 0);
 
 		V_PunchAxis(0, -2.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 
 	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4);
@@ -525,6 +527,8 @@ void EV_FireGlock2(event_args_t* args)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(empty ? GLOCK_SHOOT_EMPTY : GLOCK_SHOOT, 0);
 
 		V_PunchAxis(0, -2.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 
 	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4);
@@ -575,6 +579,8 @@ void EV_FireShotGunDouble(event_args_t* args)
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(SHOTGUN_FIRE2, 0);
 		V_PunchAxis(0, -10.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 2 : -2);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 2 : -2);
 	}
 
 	for (j = 0; j < 2; j++)
@@ -628,6 +634,8 @@ void EV_FireShotGunSingle(event_args_t* args)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(SHOTGUN_FIRE, 0);
 
 		V_PunchAxis(0, -5.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 
 	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 32, -12, 6);
@@ -684,6 +692,8 @@ void EV_FireMP5(event_args_t* args)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(MP5_FIRE1 + gEngfuncs.pfnRandomLong(0, 2), 0);
 
 		V_PunchAxis(0, gEngfuncs.pfnRandomFloat(-2, 2));
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 
 	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4);
@@ -720,6 +730,8 @@ void EV_FireMP52(event_args_t* args)
 	{
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(MP5_LAUNCH, 0);
 		V_PunchAxis(0, -10);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 
 	switch (gEngfuncs.pfnRandomLong(0, 1))
@@ -767,6 +779,8 @@ void EV_FirePython(event_args_t* args)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(PYTHON_FIRE1, multiplayer ? 1 : 0);
 
 		V_PunchAxis(0, -10.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 
 	switch (gEngfuncs.pfnRandomLong(0, 1))
@@ -875,6 +889,9 @@ void EV_FireGauss(event_args_t* args)
 	if (EV_IsLocal(idx))
 	{
 		V_PunchAxis(0, -2.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
+
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(GAUSS_FIRE2, 0);
 
 		if (!m_fPrimaryFire)
@@ -1119,6 +1136,10 @@ void EV_Crowbar(event_args_t* args)
 
 	if (EV_IsLocal(idx))
 	{
+		V_PunchAxis(0, RANDOM_LONG(0, 1) ? 2 : -2);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
+
 		switch ((g_iSwing++) % 3)
 		{
 		case 0:
@@ -1261,6 +1282,8 @@ void EV_FireCrossbow(event_args_t* args)
 			gEngfuncs.pEventAPI->EV_WeaponAnimation(CROSSBOW_FIRE3, 0);
 
 		V_PunchAxis(0, -2.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 	}
 }
 //======================
@@ -1287,6 +1310,8 @@ void EV_FireRpg(event_args_t* args)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(RPG_FIRE2, 0);
 
 		V_PunchAxis(0, -5.0);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 3 : -3);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 3 : -3);
 	}
 }
 //======================
@@ -1336,7 +1361,12 @@ void EV_EgonFire(event_args_t* args)
 
 	//Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
+	{
+		V_PunchAxis(0, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(g_fireAnims1[gEngfuncs.pfnRandomLong(0, 3)], 0);
+	}
 
 	if (iStartup && EV_IsLocal(idx) && !pBeam && !pBeam2 && 0 != cl_lw->value) //Adrian: Added the cl_lw check for those lital people that hate weapon prediction.
 	{
@@ -1449,7 +1479,9 @@ void EV_HornetGunFire(event_args_t* args)
 	//Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
 	{
-		V_PunchAxis(0, gEngfuncs.pfnRandomLong(0, 2));
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -2);
+		V_PunchAxis(1, RANDOM_LONG(0, 1) ? 1 : -1);
+		V_PunchAxis(2, RANDOM_LONG(0, 1) ? 1 : -1);
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(HGUN_SHOOT, 0);
 	}
 
