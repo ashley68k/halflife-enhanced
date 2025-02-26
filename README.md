@@ -6,6 +6,16 @@ An enhanced Half-Life SDK based on Solokiller's [Half-Life Updated SDK.](https:/
 
 This SDK serves to add features and enhancements for programmers, mappers, and players as a base for other mods.
 
+# Features/To-Do List:
+
+- Integrate BASS library and plugin support to allow for more flexible audio playback and format support
+- Enhanced viewpunch/recoil code
+- Scripting engine for maps
+- Streamline adding weapons and new content
+- Make more aspects of the game configurable with ConVars and decoupling (for instance, allowing multiplayer weapon features in singleplayer with a cvar)
+
+And more!
+
 # Half Life 1 SDK LICENSE
 
 Half Life 1 SDK Copyright © Valve Corp.
@@ -24,7 +34,3 @@ LIMITATION OF LIABILITY.  IN NO EVENT SHALL VALVE OR ITS SUPPLIERS BE LIABLE FOR
  
  
 If you would like to use the SDK for a commercial purpose, please contact Valve at sourceengine@valvesoftware.com.
-* TWHL Community
-* Knockout
-* Gamebanana
-* ModDB
