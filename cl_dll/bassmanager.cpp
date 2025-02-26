@@ -6,14 +6,16 @@
 #include <string>
 
 using namespace BASSManager;
-using namespace std;
 
 /// <summary>
-/// A function to initialize the BASS library, prepare for use, and handle error checking.
+/// A function to initialize the BASS library and plugins, prepare for use, and handle error checking.
 /// Returns true on successful initialization, false on failure.
+/// Takes the directory to the game as an input, to avoid header collisions (BASS headers include Windows headers that redefine HSPRITE)
 /// </summary>
-bool BASSManager::Initialize()
+bool BASSManager::Initialize(const char* gameDir)
 {
+	std::string pluginPath;
+
 	// Get window handle directly from SDL
 	SDL_SysWMinfo sysInfo;
 	SDL_VERSION(&sysInfo.version);
@@ -33,7 +35,20 @@ bool BASSManager::Initialize()
 		}
 		else
 		{
-			return true;
+			// TODO: Wrap in ifdef so we can disable plugin loading
+			#ifdef _WIN32
+				pluginPath = std::string(gameDir) + "/cl_dlls/basszxtune.dll";
+			#elif __linux__
+				pluginPath = std::string(gameDir) + "/cl_dlls/libbasszxtune.so";
+			#endif
+
+			if (BASS_PluginLoad(pluginPath.c_str(), 0) != 0)
+			{
+				return true;
+			}
+
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Fatal Error", "Failed to load BASS plugin.", nullptr);
+			return false;
 		}
 	}
 

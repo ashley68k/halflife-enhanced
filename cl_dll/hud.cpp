@@ -373,7 +373,8 @@ void CHud::Init()
 	m_StatusIcons.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 
-	BASSManager::Initialize();
+	// a little hacky but it prevents header conflicts
+	BASSManager::Initialize(gEngfuncs.pfnGetGameDirectory());
 
 	m_Menu.Init();
 

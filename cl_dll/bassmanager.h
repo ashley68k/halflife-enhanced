@@ -11,7 +11,7 @@
 /// </summary>
 namespace BASSManager
 {
-bool Initialize();
+bool Initialize(const char* gameDir);
 void Shutdown();
 void PlaySong();
 };
