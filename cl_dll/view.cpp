@@ -1686,7 +1686,7 @@ void V_DropPunchAngle(float frametime, float* ev_punchangle)
 	float len = VectorNormalize(ev_punchangle);
 
 	// damped oscillation parameters
-	const float frequency = 4.5f;
+	const float frequency = 3.0f;
 	const float damping = 2.0f;
 
 	float oscillation = cos(total_time * frequency * M_PI);
