@@ -7,9 +7,23 @@
 
 #pragma once
 
+/// <summary>
+/// A singleton to serve as a wrapper/abstraction layer for the BASS API,
+///	to prevent header conflicts, manage resources efficiently, and
+/// simplify ease-of-use when working with BASS.
+/// </summary>
 class CBASSManager
 {
 public:
+	// copy constructor guard (ensure use reference/avoid creating copies)
+	CBASSManager(const CBASSManager&) = delete;
+
+	/// <summary>
+	/// Returns the BASS manager object.
+	/// Use with CBASSManager::GetInstance(), and then access the exposed function members as normal.
+	/// For instance, CBASSManager::GetInstance().Play("example.mp3");
+	/// </summary>
+	/// <returns></returns>
 	static CBASSManager& GetInstance()
 	{
 		return BASS_Instance;
