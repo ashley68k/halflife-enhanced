@@ -1021,8 +1021,6 @@ void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 	// Apply damage every half second
 	pev->dmgtime = gpGlobals->time + 0.5; // half second delay until this trigger can hurt toucher again
 
-
-
 	if (!FStringNull(pev->target))
 	{
 		// trigger has a target it wants to fire.

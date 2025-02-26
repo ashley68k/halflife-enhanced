@@ -30,6 +30,8 @@
 #include "demo_api.h"
 #include "vgui_ScorePanel.h"
 
+#include "bassmanager.h"
+
 hud_player_info_t g_PlayerInfoList[MAX_PLAYERS_HUD + 1];	// player info from the engine
 extra_player_info_t g_PlayerExtraInfo[MAX_PLAYERS_HUD + 1]; // additional player info sent directly to the client dll
 
@@ -370,6 +372,8 @@ void CHud::Init()
 	m_TextMessage.Init();
 	m_StatusIcons.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
+
+	BASSManager::Initialize();
 
 	m_Menu.Init();
 

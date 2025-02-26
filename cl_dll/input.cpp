@@ -18,6 +18,8 @@
 #include <ctype.h>
 #include "Exports.h"
 
+#include "bassmanager.h"
+
 #include "vgui_TeamFortressViewport.h"
 #include "filesystem_utils.h"
 
@@ -1020,6 +1022,7 @@ void DLLEXPORT HUD_Shutdown()
 
 	ShutdownInput();
 
+	BASSManager::Shutdown();
 
 	FileSystem_FreeFileSystem();
 	CL_UnloadParticleMan();
