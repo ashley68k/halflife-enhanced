@@ -19,7 +19,7 @@ CFLAGS=$(BASE_CFLAGS) $(ARCH_CFLAGS) -DCLIENT_DLL
 
 INCLUDEDIRS=-I$(HL_SRC_DIR) -I$(HL_PARTICLEMAN_DIR) -I../dlls -I/usr/include/malloc -I$(COMMON_SRC_DIR) -I$(PUBLIC_SRC_DIR) -I../pm_shared -I../engine -I../utils/vgui/include -I../game_shared -I../external
 
-LDFLAGS=$(SHLIBLDFLAGS) $(CPP_LIB) -L$(CFG) vgui.so -L. libSDL2-2.0.so.0
+LDFLAGS=$(SHLIBLDFLAGS) $(CPP_LIB) -L$(CFG) vgui.so -L. libSDL2-2.0.so.0 -L$(CFG) libbass.so
 
 DO_CC=$(CPLUS) $(INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 
@@ -38,6 +38,7 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/ammo_secondary.o \
 	$(HL1_OBJ_DIR)/ammohistory.o \
 	$(HL1_OBJ_DIR)/battery.o \
+	$(HL1_OBJ_DIR)/bassmanager.o \
 	$(HL1_OBJ_DIR)/cdll_int.o \
 	$(HL1_OBJ_DIR)/com_weapons.o \
 	$(HL1_OBJ_DIR)/death.o \
