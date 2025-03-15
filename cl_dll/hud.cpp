@@ -381,6 +381,8 @@ void CHud::Init()
 	gEngfuncs.pfnClientCmd("richpresence_gamemode\n"); // reset
 	gEngfuncs.pfnClientCmd("richpresence_update\n");
 #endif
+
+	BASSManager::Initialize(gEngfuncs.pfnGetGameDirectory());
 }
 
 // CHud destructor
