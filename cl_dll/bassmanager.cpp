@@ -1,19 +1,21 @@
 #include "BASS/bass.h"
 #include "BASS/basszxtune.h"
+
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_syswm.h"
 #include "SDL2/SDL_messagebox.h"
+
 #include <string>
-#include <array>
 #include <dlfcn.h>
-#include <unistd.h>
 #include <filesystem>
+#include <algorithm>
 
 #include "bassmanager.h"
-#include "cl_dll.h"
 
 namespace BASSManager
 {
+	HSTREAM musicHnd;
+
 	#ifdef __linux__
 	// dlopen handle
 	void* bassHnd;
@@ -79,7 +81,7 @@ namespace BASSManager
 	}
 	#elif __linux__
 	/// @brief Initialize BASS, import functions and plugins, and setup paths
-	/// @param modDir 
+	/// @param modDir mod's directory within the Half-Life root directory
 	/// @return true on successful load, false otherwise
 	bool Initialize(const char* modDir)
 	{
@@ -128,7 +130,6 @@ namespace BASSManager
 			// 	{
 			// 	}
 			// }
-			PlaySong();
 			return true;
 		}
 	}
@@ -141,26 +142,80 @@ namespace BASSManager
 	{
 		#ifdef __linux__
 		auto BASSFree = reinterpret_cast<decltype(BASS_Free)*>(dlsym(bassHnd, "BASS_Free"));
+		auto BASSPluginFree = reinterpret_cast<decltype(BASS_PluginFree)*>(dlsym(bassHnd, "BASS_PluginFree"));
 
 		BASSFree();
+		BASSPluginFree(0);
 		dlclose(bassHnd);
 		#endif
 	}
 
-	/// <summary>
-	/// Plays a song supported by BASS native file support or plugins such as ZXTune
-	/// </summary>
-	void PlaySong()
+	/// @brief Play a song using the BASS instance, with proper state checking and plugin support.
+	/// @param musicPath an std::path with the absolute path to the file
+	/// @param loop true = loop, false = play once
+	void PlaySong(std::filesystem::path musicPath, bool loop)
 	{
 		#ifdef __linux__
 		// * This function works even with plugins.
 		auto BASSStreamCreate = reinterpret_cast<decltype(BASS_StreamCreateFile)*>(dlsym(bassHnd, "BASS_StreamCreateFile"));
-		auto BASSMod = reinterpret_cast<decltype(BASS_MusicLoad)*>(dlsym(bassHnd, "BASS_MusicLoad"));
 		auto BASSPlay = reinterpret_cast<decltype(BASS_ChannelPlay)*>(dlsym(bassHnd, "BASS_ChannelPlay"));
-		
-		// load the audio file as a stream
-		HSTREAM stream = BASSStreamCreate(FALSE, "", 0, 0, 0);
-		BASSPlay(stream, FALSE);
+		auto BASSProbeState = reinterpret_cast<decltype(BASS_ChannelIsActive)*>(dlsym(bassHnd, "BASS_ChannelIsActive"));
+
+		if(musicHnd)
+		{
+			switch(BASSProbeState(musicHnd))
+			{
+				case BASS_ACTIVE_PLAYING:
+					break;
+				default:
+					musicHnd = BASSStreamCreate(FALSE, musicPath.c_str(), 0, 0, 0);
+					BASSPlay(musicHnd, loop);
+					break;
+			}
+		}
 		#endif
+	}
+	
+	/// @brief (Un)pauses BASS playback, with state checking
+	void PauseSong()
+	{
+		auto BASSProbeState = reinterpret_cast<decltype(BASS_ChannelIsActive)*>(dlsym(bassHnd, "BASS_ChannelIsActive"));
+		auto BASSPause = reinterpret_cast<decltype(BASS_ChannelPause)*>(dlsym(bassHnd, "BASS_ChannelPause"));
+		auto BASSPlay = reinterpret_cast<decltype(BASS_ChannelPlay)*>(dlsym(bassHnd, "BASS_ChannelPlay"));
+		auto BASSFlags = reinterpret_cast<decltype(BASS_ChannelFlags)*>(dlsym(bassHnd, "BASS_ChannelFlags"));
+
+		if(musicHnd)
+		{
+			switch(BASSProbeState(musicHnd))
+			{
+				case BASS_ACTIVE_PLAYING:
+					BASSPause(musicHnd);
+					break;
+				case BASS_ACTIVE_PAUSED:
+					// resume playback with same handle and loop flag
+					// looping bool is obtained through bass state to avoid weird clunky dependency injections
+					BASSPlay(musicHnd, BASSFlags(musicHnd, 0, 0) & BASS_SAMPLE_LOOP == 1 ? true : false);
+					break;
+			}
+		}
+	}
+
+	/// @brief Stops BASS playback, with state checking
+	void StopSong()
+	{
+		auto BASSProbeState = reinterpret_cast<decltype(BASS_ChannelIsActive)*>(dlsym(bassHnd, "BASS_ChannelIsActive"));
+		auto BASSStop = reinterpret_cast<decltype(BASS_ChannelStop)*>(dlsym(bassHnd, "BASS_ChannelStop"));
+		if(BASSProbeState(musicHnd) == BASS_ACTIVE_PLAYING && musicHnd)
+		{
+			BASSStop(musicHnd);
+		}
+	}
+
+	/// @brief Sets volume of the BASS instance
+	/// @param volume 0-1 float (clamped internally)
+	void SetVolume(float volume)
+	{
+		auto BASSSetVolume = reinterpret_cast<decltype(BASS_SetVolume)*>(dlsym(bassHnd, "BASS_SetVolume"));
+		BASSSetVolume(std::clamp<float>(volume, 0, 1));
 	}
 }

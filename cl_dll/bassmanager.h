@@ -13,5 +13,8 @@ namespace BASSManager
 {
 bool Initialize(const char* gameDir);
 void Shutdown();
-void PlaySong();
+void PlaySong(std::filesystem::path musicPath, bool loop);
+void PauseSong();
+void StopSong();
+void SetVolume(float volume);
 };
